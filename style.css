@@ -4,6 +4,11 @@ body {
     place-content: center;
 }
 
+.winner {
+    font-size: 48px;
+    text-align: center;
+}
+
 .board {
     width: 300px;
     height: 300px;

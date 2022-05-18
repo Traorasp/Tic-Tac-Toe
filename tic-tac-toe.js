@@ -1,4 +1,3 @@
-
 const Gameboard = (() => {
     const board = document.querySelector('.board');
     let boardVal = [];
@@ -60,15 +59,25 @@ const Gameboard = (() => {
 })();
 
 
-const Player = (marker) => {
-    return {marker};
+const Player = (marker, name) => {
+    return {marker, name};
 }
 
 
 const Gameflow = (() => {
     let playersTurn = 0;
-    let game = true;
-    const players = [Player("X"), Player("O")];
+
+    const players = [Player("X", 'player1'), Player("O", 'player2')];
+
+    const startGame = () => {
+        game = true
+        const player1Name = document.querySelector('#player1');
+        const player2Name = document.querySelector('#player2');
+
+        players[0].name = player1Name.value ? player1Name.value : 'Player 1';
+        players[1].name = player2Name.value ? player2Name.value : 'Player 2';
+        boardSensors();
+    }
 
     const placeMarker = (box) => {
         if(game){
@@ -81,14 +90,16 @@ const Gameflow = (() => {
     }
 
     const boardSensors = () => {
-        const boardSquares = document.querySelectorAll(".board button");
+        if(game){
+            const boardSquares = document.querySelectorAll(".board button");
             boardSquares.forEach(square => {
                 square.addEventListener('click', placeMarker);
             });
+        }
     }
 
     const displayWinner = (player) => {
-        let winner = player == players[0].marker ? "Player 1" : "Player 2";
+        let winner = player == players[0].marker ? `${players[0].name}` : `${players[1].name}`;
         const winnerDisplay = document.querySelector(".winner");
         winnerDisplay.textContent = winner;
         game = false;
@@ -96,9 +107,11 @@ const Gameflow = (() => {
 
     return {
         boardSensors,
-        displayWinner
+        displayWinner,
+        startGame
     }
 
 })();
 
-Gameflow.boardSensors();
+const startBtn = document.querySelector(".start");
+startBtn.addEventListener('click', Gameflow.startGame)

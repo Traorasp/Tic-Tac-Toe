@@ -10,6 +10,11 @@ const Gameboard = (() => {
         return false;
     }
     
+    const clearBoard = () => {
+        boardVal = [];
+        updateBoard();
+    }
+
     const updateBoard = () => {
             const boardSquares = document.querySelectorAll(".board button");
             let count = 0;
@@ -50,11 +55,17 @@ const Gameboard = (() => {
         if(boardVal[2] == boardVal[4] && boardVal[4] == boardVal[6] && boardVal[6] != null){
             Gameflow.displayWinner(boardVal[2]);
         }
+
+        //Checks for a tie
+        if(boardVal.filter(val => val != null).length >= 9){
+            Gameflow.displayWinner('Tie')
+        }
     }
 
     return {
         updateBoard,
-        changeBoard
+        changeBoard,
+        clearBoard
     }
 })();
 
@@ -79,6 +90,13 @@ const Gameflow = (() => {
         boardSensors();
     }
 
+    const restart = () => {
+        game = false
+        playersTurn = 0;
+        displayWinner('');
+        Gameboard.clearBoard();
+    }
+
     const placeMarker = (box) => {
         if(game){
             place = box.target.className;
@@ -99,7 +117,7 @@ const Gameflow = (() => {
     }
 
     const displayWinner = (player) => {
-        let winner = player == players[0].marker ? `${players[0].name}` : `${players[1].name}`;
+        let winner = player == '' ? '' : player == 'Tie' ? 'Tie' : player == players[0].marker ? `${players[0].name}` : `${players[1].name}`;
         const winnerDisplay = document.querySelector(".winner");
         winnerDisplay.textContent = winner;
         game = false;
@@ -108,10 +126,14 @@ const Gameflow = (() => {
     return {
         boardSensors,
         displayWinner,
-        startGame
+        startGame,
+        restart
     }
 
 })();
 
 const startBtn = document.querySelector(".start");
 startBtn.addEventListener('click', Gameflow.startGame)
+
+const restartBtn = document.querySelector(".restart");
+restartBtn.addEventListener('click', Gameflow.restart)

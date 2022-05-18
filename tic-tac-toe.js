@@ -4,7 +4,11 @@ const Gameboard = (() => {
     let boardVal = [];
 
     const changeBoard = (marker, place) => {
-        boardVal[place] = marker;
+        if(boardVal[place] == null){
+            boardVal[place] = marker;
+            return true;
+        }
+        return false;
     }
     
     const updateBoard = () => {
@@ -34,9 +38,10 @@ const Gameflow = (() => {
 
     const placeMarker = (box) => {
         place = box.target.className;
-        Gameboard.changeBoard(players[playersTurn].marker, place)
-        Gameboard.updateBoard();
-        playersTurn == 0 ? playersTurn = 1: playersTurn = 0; 
+        if(Gameboard.changeBoard(players[playersTurn].marker, place)) {
+            Gameboard.updateBoard();
+            playersTurn == 0 ? playersTurn = 1: playersTurn = 0; 
+        }
     }
 
     const boardSensors = () => {

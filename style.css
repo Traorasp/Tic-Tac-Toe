@@ -1,0 +1,19 @@
+body {
+    display: grid;
+    grid-template-rows: repeat(3,1fr);
+    place-content: center;
+}
+
+.board {
+    flex: 1;
+    width: 300px;
+    height: 300px;
+    display: grid;
+    grid-template: repeat(3, 1fr) / repeat(3, 1fr);
+}
+
+.board div {
+    border: 5px black solid;
+    width: 100px;
+    height: 100px;
+}
